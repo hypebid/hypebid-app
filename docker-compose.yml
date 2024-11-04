@@ -1,0 +1,36 @@
+# Create a docker-compose.debug.yml file with similar configuration to Lightsail
+services:
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  hypebid:
+    image: hypebid/hypebid:v1.0
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - SERVER_PORT=${SERVER_PORT}
+      - TWITCH_CLIENT_ID=${TWITCH_CLIENT_ID}
+      - TWITCH_CLIENT_SECRET=${TWITCH_CLIENT_SECRET}
+      - FOLLOWER_UPDATE_INTERVAL=${FOLLOWER_UPDATE_INTERVAL}
+      - TRACKED_LOGINS=${TRACKED_LOGINS}
+      - HOST_URL=${HOST_URL}
+    depends_on:
+      db:
+        condition: service_healthy

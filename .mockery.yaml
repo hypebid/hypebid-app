@@ -1,0 +1,14 @@
+filename: "{{ .InterfaceName | snakecase }}_mock.go"
+dir: "internal/mocks/{{.PackageName}}"
+mockname: "Mock{{.InterfaceName}}"
+outpkg: "mocks"
+ 
+with-expecter: true
+packages:
+  github.com/hypebid/hypebid-app/internal/services:
+    # Specify the interfaces you want to mock directly under the package
+  github.com/hypebid/hypebid-app/internal/repositories:
+
+  github.com/hypebid/hypebid-app/internal/validator:
+
+  github.com/hypebid/hypebid-app/internal/twitch:
